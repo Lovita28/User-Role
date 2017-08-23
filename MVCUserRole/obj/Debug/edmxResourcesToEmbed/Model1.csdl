@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="AttendanceDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="AttendanceDBEntities2" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Fille" EntityType="AttendanceDBModel.Fille" />
+  </EntityContainer>
+  <EntityType Name="Fille">
+    <Key>
+      <PropertyRef Name="FileId" />
+    </Key>
+    <Property Name="FileId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FileName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="FilePath" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="UserId" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="Approval" Type="Boolean" Nullable="false" />
+  </EntityType>
+</Schema>

@@ -1,0 +1,58 @@
+﻿@Model
+@{
+    ViewBag.Title = "Index";
+}
+
+@if (ViewBag.displayMenu == "Yes")
+{
+    <h1>Welcome Admin</h1>
+    <h3>
+        @Html.ActionLink("Manage Role", "Index", "Role", new { id = 1}, new { @class = "btn btn-primary btn-md"})
+        @Html.ActionLink("Manage Upload", "Index", "Fille", new { id = 1}, new { @class = "btn btn-info btn-sm"})
+    </h3>
+    <br />
+    <br />
+    <table class="table table-bordered table-hover" style="margin-top:20px;">
+       <thead>
+           <tr>
+               <th colspan="5" class="alert alert-info"><center>Data User</center></th>
+           </tr>
+           <tr>
+               <th>Username</th>
+               <th>Email</th>
+               <th>Password</th>
+               <th>Action</th>
+           </tr>
+       </thead>
+        <tbody>
+            @foreach(var item in ViewBag.loop)
+            {
+                <tr>
+                    <td>@item.UserName</td>
+                    <td>@item.Email</td>
+                    <td>@item.PasswordHash</td>
+                    <td>@if (item.LockoutEnabled == false)
+                    {
+                        if (item.UserName == "Lovee")
+                        {
+                            continue;
+                          }
+                        else {
+                            @(Html.ActionLink("Disable", "Status", new { id = item.Id }, new { @class = "btn btn-warning btn-sm" }))
+                            }
+                      }
+                        else
+                        {
+                            @(Html.ActionLink("Enable", "Status", new { id = item.Id }, new { @class = "btn btn-success btn-sm" }))
+                        }
+                    
+                    @(Html.ActionLink("Hapus", "Delete", new { id = item.Id }, new { @class = "btn btn-danger btn-sm" }))</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h2>Welcome <strong>@ViewBag.Name</strong> :) We will add user module soon</h2>
+}

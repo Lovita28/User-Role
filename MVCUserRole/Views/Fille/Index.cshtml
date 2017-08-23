@@ -1,0 +1,78 @@
+﻿@model IEnumerable<MVCUserRole.Fille>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Detail Upload</h2>
+<br /><br />
+<table class="table">
+    <tr>
+        <th>Id</th>
+        <th>UserId</th>
+        <th>File Name</th>
+        <th>FilePath</th>
+        @if (ViewBag.owner == "Admin")
+        {
+            <th>Download</th>
+            <th>Approval</th>
+        }
+        else
+        {
+            <th>Status</th>
+        }
+        <th>Action</th>
+        <th></th>
+    </tr>
+    
+@foreach (var item in ViewBag.tampil) {
+    <tr>
+        <td>@item.FileId </td>
+        <td>@item.UserId</td>
+        <td>@item.FileName</td>
+        <td><img src="@Url.Content(item.FilePath)" alt="image" height="50" width="50" /></td>
+        @if (ViewBag.owner == "Admin")
+        {
+            <td> @Html.ActionLink("Download", "Download", new { id = item.FileId }, new { @class = "btn btn-info btn-sm" })</td>
+            <td>@if (item.Approval == false)
+            {
+                @Html.ActionLink("Disagree", "Approve", new { id = item.FileId }, new { @class = "btn btn-warning btn-sm" })
+            }
+            else
+            {
+                @Html.ActionLink("Agree", "Approve", new { id = item.FileId }, new { @class = "btn btn-success btn-sm" })
+            }
+            </td>
+        }
+        else
+        {
+            <td>@if (item.Approval == false)
+            {
+                <label>Disapprove</label>
+
+            }
+            else
+            {
+                <label>Approve</label>
+            }
+        </td>
+        }
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.FileId }, new { @class = "btn btn-warning btn-sm"}) &nbsp;
+            @Html.ActionLink("Details", "Details", new { id=item.FileId }, new { @class = "btn btn-info btn-sm"}) &nbsp;
+            @Html.ActionLink("Delete", "Delete", new { id=item.FileId }, new { @class = "btn btn-danger btn-sm"})
+        </td>
+    </tr>
+}
+
+</table>
+<p>
+    @if (ViewBag.owner == "Admin")
+    {
+        @Html.ActionLink("Back", "Index", "Users", null, new { @class = "btn btn-info btn-sm" })
+    }
+    else
+    {
+        @Html.ActionLink("Back", "Index", "Manage", null, new { @class = "btn btn-info btn-sm" })
+    }
+</p>

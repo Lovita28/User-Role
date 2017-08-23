@@ -1,0 +1,131 @@
+﻿@model MVCUserRole.Fille
+
+@{
+    ViewBag.Title = "Create";
+}
+<script src="../../Scripts/jquery-1.7.1.min.js" type="text/javascript"></script>
+<script src="~/Scripts/jquery.validate.js" type="text/javascript"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
+<script type="text/jscript">
+    //get file size
+    function GetFileSize(FileId) {
+        try {
+            var fileSize = 0;
+            //for IE
+            if ($.browser.msie) {
+                //before making an object of ActiveXObject,
+                //please make sure ActiveX is enabled in your IE browser
+                var objFSO = new ActiveXObject("Scripting.FileSystemObject"); var filePath = $("#" + FileId)[0].value;
+                var objFile = objFSO.getFile(FilePath);
+                var fileSize = objFile.size; //size in kb
+                fileSize = fileSize / 1048576; //size in mb
+            }
+                //for FF, Safari, Opeara and Others
+            else {
+                fileSize = $("#" + FileId)[0].files[0].size //size in kb
+                fileSize = fileSize / 1048576; //size in mb
+            }
+
+            // alert("Uploaded File Size is" + fileSize + "MB");
+            return fileSize;
+        }
+        catch (e) {
+            alert("Error is :" + e);
+        }
+    }
+
+    //get file path from client system
+    function getNameFromPath(strFilepath) {
+
+        var objRE = new RegExp(/([^\/\\]+)$/);
+        var strName = objRE.exec(strFilepath);
+
+        if (strName == null) {
+            return null;
+        }
+        else {
+            return strName[0];
+        }
+
+    }
+
+    $("#btnSubmit").live("click", function () {
+
+        if ($('#fileToUpload').val() == "") {
+            $("#spanfile").html("Please upload file");
+            return false;
+        }
+        else {
+           return checkfile();
+        }
+    });
+
+    function checkfile() {
+        var file = getNameFromPath($("#fileToUpload").val());
+        if (file != null) {
+            var extension = file.substr((file.lastIndexOf('.') + 1));
+            //  alert(extension);
+            switch (extension) {
+                case 'jpg':
+                case 'png':
+                case 'gif':
+                case 'pdf':
+                flag = true;
+                    break;
+                default:
+                    flag = false;
+            }
+        }
+        if (flag == false) {
+            $("#spanfile").text("You can upload only jpg,png,gif,pdf extension file");
+            return false;
+
+        }
+        else {
+            var size = GetFileSize('fileToUpload');
+            if (size > 3) {
+                $("#spanfile").text("You can upload file up to 3 MB");
+                return false;
+            }
+            else {
+                $("#spanfile").text("");
+            }
+        }
+    }
+    $(function () {
+        $("#fileToUpload").change(function () {
+            checkfile();
+        });
+
+    });
+
+</script>
+<h2>Create</h2>
+
+@using (Html.BeginForm("Create", "Fille", FormMethod.Post, new { enctype = "multipart/form-data"}))
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Fille</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.FilePath, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="file" name="file" id="fileToUpload" /><br /> <br />
+                <span class="" id="spanfile"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" id="btnSubmit" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
